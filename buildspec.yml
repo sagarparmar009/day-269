@@ -13,26 +13,28 @@ phases:
     commands:
       - echo "Upgrading pip to the latest version..."
       - python -m pip install --upgrade pip  # Upgrade pip to the latest version
+
   pre_build:
     commands:
       - echo "Listing files in the directory..."
-      - ls -R
-      - echo "Installing dependencies..."
-      - pip install -r https://github.com/sagarparmar009/python-app.git  # Make sure this path is correct
+      - ls -R  # List files recursively to verify contents
+      - echo "Installing dependencies from requirements.txt..."
+      - pip install -r python-app/requirements.txt  # Use correct path for requirements.txt
+
   build:
     commands:
       - echo "Running tests..."
-      - cd https://github.com/sagarparmar009/python-app.git
       - echo "Building Docker image..."
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
       - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest" .
       - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest"
+
   post_build:
     commands:
       - echo "Build completed successfully!"
 
 artifacts:
   files:
-    - '**/*'
-  base-directory: ../python-app
+    - '**/*'  # Include all files in the artifacts
+  base-directory: python-app  # Ensure this points to the correct directory containing the final artifacts
 
