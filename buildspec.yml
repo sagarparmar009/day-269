@@ -19,7 +19,7 @@ phases:
       - echo "Listing files in the directory..."
       - ls -R  # List files recursively to verify contents
       - echo "Installing dependencies from requirements.txt..."
-      - pip install -r python-app/requirements.txt  # Use correct path for requirements.txt
+      - pip install -r requirements.txt  # Use correct path for requirements.txt
 
   build:
     commands:
