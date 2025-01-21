@@ -5,6 +5,8 @@ env:
     DOCKER_REGISTRY_USERNAME: /myapp/docker-credential/username
     DOCKER_REGISTRY_PASSWORD: /myapp/docker-credential/password
     DOCKER_REGISTRY_URL: /myapp/docker-registry/url
+  variables:
+    AWS_REGION: "eu-north-1"  # Specify the correct AWS region here, if missing
 
 phases:
   install:
@@ -19,24 +21,24 @@ phases:
       - echo "Listing files in the directory..."
       - ls -R  # List files recursively to verify contents
       - echo "Installing dependencies from requirements.txt..."
-      - pip install -r requirements.txt  # Use correct path for requirements.txt
+      - pip install -r requirements.txt  # Adjust the path to your requirements.txt
 
- build:
+build:
   commands:
     - echo "Running tests..."
     - echo "Building Docker image..."
+    # Make sure $DOCKER_REGISTRY_URL is the full ECR URL
     - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin "$DOCKER_REGISTRY_URL"
     - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest" .
     - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest"
 
-
-
-  post_build:
-    commands:
-      - echo "Build completed successfully!"
+post_build:
+  commands:
+    - echo "Build completed successfully!"
 
 artifacts:
   files:
     - '**/*'  # Include all files in the artifacts
   base-directory: python-app  # Ensure this points to the correct directory containing the final artifacts
+
 
