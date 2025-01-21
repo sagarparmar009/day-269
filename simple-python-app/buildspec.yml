@@ -13,20 +13,23 @@ phases:
     commands:
       - echo "Upgrading pip to the latest version..."
       - python -m pip install --upgrade pip  # Upgrade pip to the latest version
+
   pre_build:
     commands:
       - echo "Listing files in the directory..."
       - ls -R
       - echo "Installing dependencies..."
-      - pip install -r day-269/simple-Python-app/requirements.txt  # Make sure this path is correct
+      - pip install -r simple-Python-app/requirements.txt  # Corrected path
+
   build:
     commands:
       - echo "Running tests..."
-      - cd simple-Python-app/requirements.txt
+      - cd simple-Python-app  # Corrected directory
       - echo "Building Docker image..."
       - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
       - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest" .
       - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest"
+
   post_build:
     commands:
       - echo "Build completed successfully!"
@@ -34,5 +37,6 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: ../simple-python-app
+  base-directory: simple-Python-app  # Corrected path to your app directory
+
 
