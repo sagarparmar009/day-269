@@ -19,7 +19,7 @@ phases:
       - echo "Listing files in the directory..."
       - ls -R
       - echo "Installing dependencies..."
-      - pip install -r simple-Python-app/requirements.txt  # Corrected path
+      - pip install -r day-269/simple-Python-app/requirements.txt  # Corrected path
 
   build:
     commands:
