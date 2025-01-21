@@ -21,13 +21,14 @@ phases:
       - echo "Installing dependencies from requirements.txt..."
       - pip install -r requirements.txt  # Use correct path for requirements.txt
 
-  build:
+ build:
   commands:
     - echo "Running tests..."
     - echo "Building Docker image..."
-    - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin "$DOCKER_REGISTRY_URL"
-    - docker build -t "$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest" .
-    - docker push "$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest"
+    - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin "$DOCKER_REGISTRY_URL"
+    - docker build -t "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest" .
+    - docker push "$DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_USERNAME/simple-python-flask-app:latest"
+
 
 
   post_build:
