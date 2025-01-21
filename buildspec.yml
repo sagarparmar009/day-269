@@ -38,4 +38,4 @@ phases:
 artifacts:
   files:
     - '**/*'  # Include all files in the artifacts
-  base-directory: python-app  # Ensure this points to the correct directory containing the final artifacts
+  root-directory: python-app  # Ensure this points to the correct directory containing the final artifacts
